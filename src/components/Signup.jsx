@@ -1,27 +1,29 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { useForm } from "react-hook-form";
+
+import { useNavigate } from "react-router-dom"; 
+
+
 
 const Signup = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+   const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
 
-    const form = e.target;
-    const data = {
-      fullName: form.fullName.value,
-      phone: form.phone.value,
-      email: form.email.value,
-      password: form.password.value,
-      company: form.company.value,
-      isAgency: form.isAgency.value,
-    };
-
+   const onSubmit = (data) => {
     console.log("Form Data:", data);
+    navigate("/signup/account", { state: data });
   };
+  
 
   return (
     <div className="flex justify-center mt-[50px] h-full">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         style={{
           width: "400px",
           padding: "20px",
@@ -37,8 +39,8 @@ const Signup = () => {
             type="text"
             name="fullName"
             placeholder="Full name"
-            required
-          />
+             {...register("fullName", { required: "Full Name is required" })}
+          />{errors.fullName && <p className="text-red-500">{errors.fullName.message}</p>}
         </div>
 
         <div className="flex flex-col gap-2 mt-5">
@@ -48,8 +50,9 @@ const Signup = () => {
             type="text"
             name="phone"
             placeholder="Phone number"
-            required
-          />
+             {...register("phone", { required: "Phone number is required" })}
+          /> 
+          {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
         </div>
         <div className="flex flex-col gap-2 mt-5">
           <label className="text-purple-800">Email address</label>
@@ -58,8 +61,9 @@ const Signup = () => {
             type="email"
             name="email"
             placeholder="Email address"
-            required
+            {...register("email", { required: "Email is required" })}
           />
+          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
         </div>
         <div className="flex flex-col gap-2 mt-5">
           <label className="text-purple-800">Password</label>
@@ -68,8 +72,9 @@ const Signup = () => {
             type="password"
             name="password"
             placeholder="Password"
-            required
+            {...register("password", { required: "Password is required" })}
           />
+          {errors.password && <p className="text-red-500">{errors.password.message}</p>}
         </div>
         <div className="flex flex-col gap-2 mt-5">
           <label className="text-purple-800">Company name</label>
@@ -78,12 +83,13 @@ const Signup = () => {
             type="text"
             name="company"
             placeholder="Company name"
-            required
+            {...register("company", { required: "Company name is required" })}
           />
+          {errors.company && <p className="text-red-500">{errors.company.message}</p>}
         </div>
 
         <p className="mt-3">Are you an Agency?</p>
-        <div className="flex mt-3">
+        <div className="flex mt-3 gap-2 mb-2">
           <label>
             <input type="radio" name="isAgency" value="yes" required /> Yes
           </label>
@@ -91,7 +97,7 @@ const Signup = () => {
             <input type="radio" name="isAgency" value="no" required /> No
           </label>
         </div>
-        <Link to="/signup/account">
+        
           <button
             type="submit"
             style={{
@@ -105,7 +111,7 @@ const Signup = () => {
           >
             Create Account
           </button>
-        </Link>
+        
       </form>
     </div>
   );

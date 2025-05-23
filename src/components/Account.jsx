@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-
+import React from "react";
 const Account= () => {
   const location = useLocation();
   const name = location.state?.name || "User";
